@@ -103,6 +103,17 @@ export class InstanceItem extends ScopeItem {
     let item = await super.getTreeItem()
     item.contextValue = 'Module'
     item.iconPath = new vscode.ThemeIcon('chip')
+    if (this.definition) {
+      let fileBasename = this.definition.doc.fileName.split('/').at(-1)
+      item.description = '(' + fileBasename + ')'
+    }
+    if (this.definition && this.hasChildren()) {
+      let instNum = this.definition.children.filter(
+        (child) => child.type === 'instance').length
+      if (instNum > 0){
+        item.description += ' (' + instNum + ')'
+      }
+    }
     return item
   }
 
